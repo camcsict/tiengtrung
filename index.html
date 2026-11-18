@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成分缺失专项练习与学习</title>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --primary-light: #e0f2fe;
+            --primary-hover: #0369a1;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #cbd5e1;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
+            --font-scale: 1rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 16px;
+            font-size: var(--font-scale);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .font-btns {
+            display: flex;
+            background: var(--primary-light);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .font-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: background 0.2s;
+        }
+
+        .font-btn:hover, .font-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-pdf {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-pdf:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 8px;
+        }
+
+        p, li {
+            margin-bottom: 8px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        /* Interactive Sentence Components */
+        .exercise-box {
+            background: var(--primary-light);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .sentence-label {
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .word-token-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .word-token {
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .word-token:hover {
+            background: #cbd5e1;
+        }
+
+        .word-token.selected-error {
+            background-color: var(--error-color);
+            color: white;
+            border-color: #dc2626;
+            text-decoration: line-through;
+        }
+
+        .correction-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .correction-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* True/False Exercises */
+        .tf-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+        .tf-options {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .tf-btn {
+            padding: 4px 12px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tf-btn.selected-true {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .tf-btn.selected-false {
+            background-color: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+        }
+
+        /* Print / PDF Styling */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+            .controls, .top-bar button {
+                display: none !important;
+            }
+            .correction-input {
+                border: none;
+                border-bottom: 1px solid #000;
+                border-radius: 0;
+                padding: 4px 0;
+            }
+            .word-token.selected-error {
+                border-bottom: 2px solid red;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <h1>成分缺失专项练习与学习</h1>
+        <div class="controls">
+            <div class="font-btns">
+                <button class="font-btn active" onclick="setFontSize('1rem', this)">A</button>
+                <button class="font-btn" onclick="setFontSize('1.15rem', this)">A+</button>
+                <button class="font-btn" onclick="setFontSize('1.3rem', this)">A++</button>
+            </div>
+            <button class="btn-pdf" onclick="window.print()">导出 PDF / 打印</button>
+        </div>
+    </div>
+
+    <!-- 热身部分 -->
+    <section>
+        <h2>热身</h2>
+        <div class="exercise-box">
+            <span class="sentence-label">句子（点击文字可选择错词，或直接在下方输入修改后的句子）：</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">在</span>
+                <span class="word-token" onclick="toggleToken(this)">老</span>
+                <span class="word-token" onclick="toggleToken(this)">师</span>
+                <span class="word-token" onclick="toggleToken(this)">的</span>
+                <span class="word-token" onclick="toggleToken(this)">教</span>
+                <span class="word-token" onclick="toggleToken(this)">育</span>
+                <span class="word-token" onclick="toggleToken(this)">下</span>
+                <span class="word-token" onclick="toggleToken(this)">,</span>
+                <span class="word-token" onclick="toggleToken(this)">使</span>
+                <span class="word-token" onclick="toggleToken(this)">我</span>
+                <span class="word-token" onclick="toggleToken(this)">提</span>
+                <span class="word-token" onclick="toggleToken(this)">高</span>
+                <span class="word-token" onclick="toggleToken(this)">了</span>
+                <span class="word-token" onclick="toggleToken(this)">认</span>
+                <span class="word-token" onclick="toggleToken(this)">识</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句：在这里输入修改后的句子（选填）">
+        </div>
+    </section>
+
+    <!-- 新内容部分 -->
+    <section>
+        <h2>新内容</h2>
+        <p>成分缺失是指一句话的结构不完整，缺少了一些组成部分。</p>
+        <p>最常见的是主谓宾等主要成分缺失，有时也有其他一些成分缺失的情况。</p>
+        <br>
+        <h3>1. 主语残缺</h3>
+        <p><strong>特点：</strong>介词在开头的句子，容易缺少主语。</p>
+        <p><em>示例：</em>在老师的教育下, 我提高了认识。</p>
+        <br>
+        <h3>2. 谓语残缺</h3>
+        <p><strong>方法：</strong>提取主干，看看有没有描述主语“做什么”、怎么样，也就是看看有没有动词（谓语一般由动词充当）。</p>
+        
+        <div class="exercise-box">
+            <span class="sentence-label">句子：这是我第一次钢琴比赛。。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">这</span>
+                <span class="word-token" onclick="toggleToken(this)">是</span>
+                <span class="word-token" onclick="toggleToken(this)">我</span>
+                <span class="word-token" onclick="toggleToken(this)">第</span>
+                <span class="word-token" onclick="toggleToken(this)">一</span>
+                <span class="word-token" onclick="toggleToken(this)">次</span>
+                <span class="word-token" onclick="toggleToken(this)">钢</span>
+                <span class="word-token" onclick="toggleToken(this)">琴</span>
+                <span class="word-token" onclick="toggleToken(this)">比</span>
+                <span class="word-token" onclick="toggleToken(this)">赛</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句：在这里输入修改后的句子（选填）">
+        </div>
+
+        <h3>3. 宾语残缺</h3>
+        <p><strong>特点：</strong>提取主干，关注动词后面缺不缺内容。</p>
+        
+        <div class="exercise-box">
+            <span class="sentence-label">句子：他除了班里和学生会的工作外, 还承担了广播站的主持人。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">他</span>
+                <span class="word-token" onclick="toggleToken(this)">除</span>
+                <span class="word-token" onclick="toggleToken(this)">了</span>
+                <span class="word-token" onclick="toggleToken(this)">班</span>
+                <span class="word-token" onclick="toggleToken(this)">里</span>
+                <span class="word-token" onclick="toggleToken(this)">和</span>
+                <span class="word-token" onclick="toggleToken(this)">学</span>
+                <span class="word-token" onclick="toggleToken(this)">生</span>
+                <span class="word-token" onclick="toggleToken(this)">会</span>
+                <span class="word-token" onclick="toggleToken(this)">的</span>
+                <span class="word-token" onclick="toggleToken(this)">工</span>
+                <span class="word-token" onclick="toggleToken(this)">作</span>
+                <span class="word-token" onclick="toggleToken(this)">外</span>
+                <span class="word-token" onclick="toggleToken(this)">,</span>
+                <span class="word-token" onclick="toggleToken(this)">还</span>
+                <span class="word-token" onclick="toggleToken(this)">承</span>
+                <span class="word-token" onclick="toggleToken(this)">担</span>
+                <span class="word-token" onclick="toggleToken(this)">了</span>
+                <span class="word-token" onclick="toggleToken(this)">广</span>
+                <span class="word-token" onclick="toggleToken(this)">播</span>
+                <span class="word-token" onclick="toggleToken(this)">站</span>
+                <span class="word-token" onclick="toggleToken(this)">的</span>
+                <span class="word-token" onclick="toggleToken(this)">主</span>
+                <span class="word-token" onclick="toggleToken(this)">持</span>
+                <span class="word-token" onclick="toggleToken(this)">人</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句：在这里输入修改后的句子（选填）">
+        </div>
+    </section>
+
+    <!-- 练习 1 -->
+    <section>
+        <h2>练习 1 – 判断正误 (判断 对/错)</h2>
+        <div class="tf-item">
+            <span>1．经过大家的帮助，改正了缺点。</span>
+            <div class="tf-options">
+                <button class="tf-btn" onclick="setTF(this, 'true')">对</button>
+                <button class="tf-btn" onclick="setTF(this, 'false')">错</button>
+            </div>
+        </div>
+        <div class="tf-item">
+            <span>2．小明非常喜欢听音乐。</span>
+            <div class="tf-options">
+                <button class="tf-btn" onclick="setTF(this, 'true')">对</button>
+                <button class="tf-btn" onclick="setTF(this, 'false')">错</button>
+            </div>
+        </div>
+        <div class="tf-item">
+            <span>3．科学家刻苦钻研科学永远值得我们学习。</span>
+            <div class="tf-options">
+                <button class="tf-btn" onclick="setTF(this, 'true')">对</button>
+                <button class="tf-btn" onclick="setTF(this, 'false')">错</button>
+            </div>
+        </div>
+        <div class="tf-item">
+            <span>4．我完成了老师布置的作业。</span>
+            <div class="tf-options">
+                <button class="tf-btn" onclick="setTF(this, 'true')">对</button>
+                <button class="tf-btn" onclick="setTF(this, 'false')">错</button>
+            </div>
+        </div>
+        <div class="tf-item">
+            <span>5．认真看完了这本课外书。</span>
+            <div class="tf-options">
+                <button class="tf-btn" onclick="setTF(this, 'true')">对</button>
+                <button class="tf-btn" onclick="setTF(this, 'false')">错</button>
+            </div>
+        </div>
+        <div class="tf-item">
+            <span>6．消防员不怕危险保护人民深深打动了我。</span>
+            <div class="tf-options">
+                <button class="tf-btn" onclick="setTF(this, 'true')">对</button>
+                <button class="tf-btn" onclick="setTF(this, 'false')">错</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 练习 2 -->
+    <section>
+        <h2>练习 2 - 句子分析与修改 (判断并修改)</h2>
+        
+        <div class="exercise-box">
+            <span class="sentence-label">句子 1：经过大家的帮助，改正了缺点。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">经</span>
+                <span class="word-token" onclick="toggleToken(this)">过</span>
+                <span class="word-token" onclick="toggleToken(this)">大</span>
+                <span class="word-token" onclick="toggleToken(this)">家</span>
+                <span class="word-token" onclick="toggleToken(this)">的</span>
+                <span class="word-token" onclick="toggleToken(this)">帮</span>
+                <span class="word-token" onclick="toggleToken(this)">助</span>
+                <span class="word-token" onclick="toggleToken(this)">，</span>
+                <span class="word-token" onclick="toggleToken(this)">改</span>
+                <span class="word-token" onclick="toggleToken(this)">正</span>
+                <span class="word-token" onclick="toggleToken(this)">了</span>
+                <span class="word-token" onclick="toggleToken(this)">缺</span>
+                <span class="word-token" onclick="toggleToken(this)">点</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句或修改意见（若句子正确可写“正确”）">
+        </div>
+
+        <div class="exercise-box">
+            <span class="sentence-label">句子 2：小明非常喜欢听音乐。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">小</span>
+                <span class="word-token" onclick="toggleToken(this)">明</span>
+                <span class="word-token" onclick="toggleToken(this)">非</span>
+                <span class="word-token" onclick="toggleToken(this)">常</span>
+                <span class="word-token" onclick="toggleToken(this)">喜</span>
+                <span class="word-token" onclick="toggleToken(this)">欢</span>
+                <span class="word-token" onclick="toggleToken(this)">听</span>
+                <span class="word-token" onclick="toggleToken(this)">音</span>
+                <span class="word-token" onclick="toggleToken(this)">乐</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句或修改意见（若句子正确可写“正确”）">
+        </div>
+
+        <div class="exercise-box">
+            <span class="sentence-label">句子 3：科学家刻苦钻研科学永远值得我们学习。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">科</span>
+                <span class="word-token" onclick="toggleToken(this)">学</span>
+                <span class="word-token" onclick="toggleToken(this)">家</span>
+                <span class="word-token" onclick="toggleToken(this)">刻</span>
+                <span class="word-token" onclick="toggleToken(this)">苦</span>
+                <span class="word-token" onclick="toggleToken(this)">钻</span>
+                <span class="word-token" onclick="toggleToken(this)">研</span>
+                <span class="word-token" onclick="toggleToken(this)">科</span>
+                <span class="word-token" onclick="toggleToken(this)">学</span>
+                <span class="word-token" onclick="toggleToken(this)">永</span>
+                <span class="word-token" onclick="toggleToken(this)">远</span>
+                <span class="word-token" onclick="toggleToken(this)">值</span>
+                <span class="word-token" onclick="toggleToken(this)">得</span>
+                <span class="word-token" onclick="toggleToken(this)">我</span>
+                <span class="word-token" onclick="toggleToken(this)">们</span>
+                <span class="word-token" onclick="toggleToken(this)">学</span>
+                <span class="word-token" onclick="toggleToken(this)">习</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句或修改意见（若句子正确可写“正确”）">
+        </div>
+
+        <div class="exercise-box">
+            <span class="sentence-label">句子 4：我完成了老师布置的作业。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">我</span>
+                <span class="word-token" onclick="toggleToken(this)">完</span>
+                <span class="word-token" onclick="toggleToken(this)">成</span>
+                <span class="word-token" onclick="toggleToken(this)">了</span>
+                <span class="word-token" onclick="toggleToken(this)">老</span>
+                <span class="word-token" onclick="toggleToken(this)">师</span>
+                <span class="word-token" onclick="toggleToken(this)">布</span>
+                <span class="word-token" onclick="toggleToken(this)">置</span>
+                <span class="word-token" onclick="toggleToken(this)">的</span>
+                <span class="word-token" onclick="toggleToken(this)">作</span>
+                <span class="word-token" onclick="toggleToken(this)">业</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句或修改意见（若句子正确可写“正确”）">
+        </div>
+
+        <div class="exercise-box">
+            <span class="sentence-label">句子 5：认真看完了这本课外书。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">认</span>
+                <span class="word-token" onclick="toggleToken(this)">真</span>
+                <span class="word-token" onclick="toggleToken(this)">看</span>
+                <span class="word-token" onclick="toggleToken(this)">完</span>
+                <span class="word-token" onclick="toggleToken(this)">了</span>
+                <span class="word-token" onclick="toggleToken(this)">这</span>
+                <span class="word-token" onclick="toggleToken(this)">本</span>
+                <span class="word-token" onclick="toggleToken(this)">课</span>
+                <span class="word-token" onclick="toggleToken(this)">外</span>
+                <span class="word-token" onclick="toggleToken(this)">书</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句或修改意见（若句子正确可写“正确”）">
+        </div>
+
+        <div class="exercise-box">
+            <span class="sentence-label">句子 6：消防员不怕危险保护人民深深打动了我。</span>
+            <div class="word-token-container">
+                <span class="word-token" onclick="toggleToken(this)">消</span>
+                <span class="word-token" onclick="toggleToken(this)">防</span>
+                <span class="word-token" onclick="toggleToken(this)">员</span>
+                <span class="word-token" onclick="toggleToken(this)">不</span>
+                <span class="word-token" onclick="toggleToken(this)">怕</span>
+                <span class="word-token" onclick="toggleToken(this)">危</span>
+                <span class="word-token" onclick="toggleToken(this)">险</span>
+                <span class="word-token" onclick="toggleToken(this)">保</span>
+                <span class="word-token" onclick="toggleToken(this)">护</span>
+                <span class="word-token" onclick="toggleToken(this)">人</span>
+                <span class="word-token" onclick="toggleToken(this)">民</span>
+                <span class="word-token" onclick="toggleToken(this)">深</span>
+                <span class="word-token" onclick="toggleToken(this)">深</span>
+                <span class="word-token" onclick="toggleToken(this)">打</span>
+                <span class="word-token" onclick="toggleToken(this)">动</span>
+                <span class="word-token" onclick="toggleToken(this)">我</span>
+                <span class="word-token" onclick="toggleToken(this)">。</span>
+            </div>
+            <input type="text" class="correction-input" placeholder="正确句或修改意见（若句子正确可写“正确”）">
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // Toggle word error selection (1 or multiple words)
+    function toggleToken(element) {
+        element.classList.toggle('selected-error');
+    }
+
+    // True/False selection
+    function setTF(button, value) {
+        const parent = button.parentElement;
+        parent.querySelectorAll('.tf-btn').forEach(btn => {
+            btn.classList.remove('selected-true', 'selected-false');
+        });
+        if (value === 'true') {
+            button.classList.add('selected-true');
+        } else {
+            button.classList.add('selected-false');
+        }
+    }
+
+    // Change font size
+    function setFontSize(size, btn) {
+        document.documentElement.style.setProperty('--font-scale', size);
+        document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
